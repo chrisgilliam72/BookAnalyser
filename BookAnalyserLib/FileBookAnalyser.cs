@@ -16,6 +16,13 @@ namespace BookAnalyserLib
         private String _LastError;
 
 
+        public void UploadText(String bookText)
+        {
+            _LastError = "";
+            _bookRawText = bookText;
+           _bookPreprocessedText = _bookRawText.Replace(",", " ");
+
+        }
         public async Task<bool> UploadFile(String documentPath)
         {
             try
