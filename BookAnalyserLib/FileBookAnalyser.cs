@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BookAnalyserLib
 {
-    class FileBookAnalyser : IBookAnalyser
+    public class FileBookAnalyser : IBookAnalyser
     {
         private ConcurrentDictionary<String, int> _wordCountMap;
         private String _bookRawText;
@@ -46,7 +46,7 @@ namespace BookAnalyserLib
             try
             {
                 var tasklist = new Task[2];
-                List<String> ListLines = new();
+                List<String> ListLines = new List<string>();
                 _wordCountMap = new ConcurrentDictionary<string, int>();
                 _LastError = "";
 
@@ -87,7 +87,7 @@ namespace BookAnalyserLib
         {
             try
             {
-                List<WordCountResult> resultsList = new();
+                List<WordCountResult> resultsList = new List<WordCountResult>();
 
                 if (_wordCountMap != null && _wordCountMap.Count > 0)
                 {
