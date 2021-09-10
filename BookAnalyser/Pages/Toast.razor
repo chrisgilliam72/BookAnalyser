@@ -1,0 +1,29 @@
+﻿
+
+<div aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;">
+    <div class="toast" role="alert" style=" background-color:#E7F4E7; position: fixed; bottom: 100px; left: 50px; min-width:250px">
+        <div class="toast-header">
+
+            <div class="media-left">
+                @if (@IsError)
+                {
+                    <i class="fas fa-exclamation-triangle media-object fa-lg" style=" color:#FF0000"> </i>
+                }
+                else
+                {
+
+                    <i class="fas fa-check-circle media-object fa-lg" style=" color:#47D764"> </i>
+                }
+                &nbsp; &nbsp;
+            </div>
+            <div class="media-body">
+                @Title
+                <br />
+
+            </div>
+        </div>
+        <div class="toast-body">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  @ToastMessage
+        </div>
+    </div>
+</div>

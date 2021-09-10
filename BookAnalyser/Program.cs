@@ -21,6 +21,7 @@ namespace BookAnalyser
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+
                 });
     }
 }

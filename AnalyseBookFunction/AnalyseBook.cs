@@ -16,7 +16,7 @@ namespace AnalyseBookFunction
         private IBookAnalyser _bookAnalyser;
         public AnalyseBook(IBookAnalyser bookAnalyser)
         {
-            _bookAnalyser = bookAnalyser;
+            _bookAnalyser=bookAnalyser;
         }
 
         [FunctionName("AnalyseBook")]

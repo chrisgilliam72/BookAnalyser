@@ -49,30 +49,34 @@ namespace BookAnalyserLib
                 List<String> ListLines = new List<string>();
                 _wordCountMap = new ConcurrentDictionary<string, int>();
                 _LastError = "";
+                if (_bookPreprocessedText!=null)
+                {
+                    ListLines.AddRange(_bookPreprocessedText.Split("\r\n"));
 
-                ListLines.AddRange(_bookPreprocessedText.Split("\r\n"));
+                    int lineCount = ListLines.Count();
+                    int topHalf = lineCount / 2;
+                    int bottomHalf = lineCount - topHalf;
+                    var topLines = ListLines.Take(topHalf).ToList();
+                    var bottomLines = ListLines.TakeLast(bottomHalf).ToList();
 
-                int lineCount = ListLines.Count();
-                int topHalf = lineCount / 2;
-                int bottomHalf = lineCount - topHalf;
-                var topLines = ListLines.Take(topHalf).ToList();
-                var bottomLines = ListLines.TakeLast(bottomHalf).ToList();
-
-                tasklist[0] = Task.Run(() =>
+                    tasklist[0] = Task.Run(() =>
                     {
                         ProcessLines(topLines);
                     }
-                 );
+                     );
 
-                tasklist[1] = Task.Run(() =>
-                {
-                    ProcessLines(bottomLines);
+                    tasklist[1] = Task.Run(() =>
+                    {
+                        ProcessLines(bottomLines);
+                    }
+                    );
+
+
+                    await Task.WhenAll(tasklist);
+                    return true;
                 }
-                );
-
-
-                await Task.WhenAll(tasklist);
-                return true;
+                _LastError = "File error";
+                return false;
 
             }
             catch (Exception ex)
