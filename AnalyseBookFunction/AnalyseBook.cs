@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using BookAnalyserLib;
+using System.Text.Json;
 
 namespace AnalyseBookFunction
 {
@@ -21,22 +22,22 @@ namespace AnalyseBookFunction
 
         [FunctionName("AnalyseBook")]
         public  async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "AnalyseBook/{minWordLength}/{topResultCount}")] HttpRequest req,
+           int minWordLength, int topResultCount)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
-
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+            var formdata = await req.ReadFormAsync();
+            var file = req.Form.Files["file"];
+            using (Stream fileStream = new FileStream(file.FileName, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+           
+            await _bookAnalyser.UploadFile(file.FileName);
+            await _bookAnalyser.ProcessBook();
+             var results= _bookAnalyser.GetTopResults(topResultCount, minWordLength);
+            var resultsJsonString = System.Text.Json.JsonSerializer.Serialize(results);
+            return new OkObjectResult(resultsJsonString);
         }
     }
 }

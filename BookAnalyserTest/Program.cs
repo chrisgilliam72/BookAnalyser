@@ -15,7 +15,11 @@ namespace BookAnalyserTest
             if (bookAnalyser!=null)
             {
                 await bookAnalyser.UploadFile("warpeace.txt");
+                DateTime dtStart = DateTime.Now;
                 await bookAnalyser.ProcessBook();
+                DateTime dtEnd = DateTime.Now;
+                var execTime = (dtEnd - dtStart).TotalMilliseconds;
+                Console.WriteLine("Execution time "+ execTime + " milliseconds");
                 Console.WriteLine("Top words:");
 
                 var topWords = bookAnalyser.GetTopResults();
