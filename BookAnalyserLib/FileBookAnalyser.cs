@@ -128,10 +128,11 @@ namespace BookAnalyserLib
                 {
                     if (word.Length > 0)
                     {
-                        if (_wordCountMap.ContainsKey(word))
-                            _wordCountMap[word]++;
+                        var wordLower = word.ToLower();
+                        if (_wordCountMap.ContainsKey(wordLower))
+                            _wordCountMap[wordLower]++;
                         else
-                            _wordCountMap.TryAdd(word, 1);
+                            _wordCountMap.TryAdd(wordLower, 1);
 
                         wordCount++;
                     }
